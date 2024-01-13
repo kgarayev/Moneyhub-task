@@ -67,6 +67,8 @@ app.get("/generate-report", async (req, res) => {
     // resolve all promises at once
     const csvData = await Promise.all(csvPromises);
 
+    // console.log(csvData);
+
     // creating headers
     const headers = [
       "User",
@@ -85,7 +87,17 @@ app.get("/generate-report", async (req, res) => {
 
     // console.log(csv);
 
-    // console.log(csvData);
+    // send csv report to investments service
+    const response = await request({
+      method: "POST",
+      uri: `${config.investmentsServiceUrl}/investments/export`,
+      body: { csv: csv },
+      json: true,
+      resolveWithFullResponse: true,
+    });
+
+    // console.log(response.statusCode);
+    // console.log(response);
   } catch (e) {
     console.error(e);
     res.status(500).send("error with report");
