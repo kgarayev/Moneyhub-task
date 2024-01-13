@@ -32,6 +32,13 @@ app.get("/investments/:id", (req, res) => {
 // new route for csv report generation
 app.get("/generate-report", async (req, res) => {
   try {
+    // fetching investment records
+    const investments = await request({
+      uri: `${config.investmentsServiceUrl}/investments`,
+      json: true,
+    });
+
+    // console.log(investments);
   } catch (e) {
     console.error(e);
     res.status(500).send("error with report");
