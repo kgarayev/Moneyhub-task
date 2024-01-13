@@ -39,6 +39,35 @@ app.get("/generate-report", async (req, res) => {
     });
 
     // console.log(investments);
+
+    // fetch company details to get investment data and return an array of promises
+    // flatten the array to map through holdings
+    const csvPromises = investments.flatMap((investment) =>
+      investment.holdings.map(async (holding) => {
+        // send the request to financial companies service
+        const company = await request({
+          uri: `${config.companiesServicesUrl}/companies/${holding.id}`,
+          json: true,
+        });
+
+        // return object (basically the whole thing becomes an array of objects)
+        return {
+          User: investment.userId,
+          FirstName: investment.firstName,
+          LastName: investment.lastName,
+          Date: investment.date,
+          Holding: company.name,
+          Value: investment.investmentTotal * holding.investmentPercentage,
+        };
+      })
+    );
+
+    // console.log(csvPromises);
+
+    // resolve all promises at once
+    const csvData = await Promise.all(csvPromises);
+
+    // console.log(csvData);
   } catch (e) {
     console.error(e);
     res.status(500).send("error with report");
