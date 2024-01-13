@@ -67,6 +67,24 @@ app.get("/generate-report", async (req, res) => {
     // resolve all promises at once
     const csvData = await Promise.all(csvPromises);
 
+    // creating headers
+    const headers = [
+      "User",
+      "FirstName",
+      "LastName",
+      "Date",
+      "Holding",
+      "Value",
+    ];
+
+    // convert the data to csv format
+    const csv = csvStringify(csvData, {
+      header: true,
+      columns: headers,
+    });
+
+    // console.log(csv);
+
     // console.log(csvData);
   } catch (e) {
     console.error(e);
