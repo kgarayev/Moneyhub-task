@@ -98,16 +98,26 @@ app.get("/generate-report", async (req, res) => {
 
     // console.log(response.statusCode);
     // console.log(response);
+
+    // return csv to the admin
+    res.setHeader("Content-Type", "text/csv");
+    res.send(csv);
   } catch (e) {
     console.error(e);
     res.status(500).send("error with report");
   }
 });
 
-app.listen(config.port, (err) => {
-  if (err) {
-    console.error("Error occurred starting the server", err);
-    process.exit(1);
-  }
-  console.log(`Server running on port ${config.port}`);
-});
+// wraping for testing
+if (process.env.NODE_ENV !== "test") {
+  app.listen(config.port, (err) => {
+    if (err) {
+      console.error("Error occurred starting the server", err);
+      process.exit(1);
+    }
+    console.log(`Server running on port ${config.port}`);
+  });
+}
+
+// exporting for testing
+module.exports = app;
