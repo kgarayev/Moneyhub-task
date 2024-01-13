@@ -1,28 +1,47 @@
-const express = require("express")
-const bodyParser = require("body-parser")
-const config = require("config")
-const request = require("request")
+const express = require("express");
+const bodyParser = require("body-parser");
+const config = require("config");
 
-const app = express()
+// importing request promise to deal with promises
+const request = require("request-promise");
+const R = require("ramda");
 
-app.use(bodyParser.json({limit: "10mb"}))
+// importing csv-stringify module to deal with csvs
+const { stringify: csvStringify } = require("csv-stringify/sync");
 
+const app = express();
+
+app.use(bodyParser.json({ limit: "10mb" }));
+
+// existing code - not touching it
 app.get("/investments/:id", (req, res) => {
-  const {id} = req.params
-  request.get(`${config.investmentsServiceUrl}/investments/${id}`, (e, r, investments) => {
-    if (e) {
-      console.error(e)
-      res.send(500)
-    } else {
-      res.send(investments)
+  const { id } = req.params;
+  request.get(
+    `${config.investmentsServiceUrl}/investments/${id}`,
+    (e, r, investments) => {
+      if (e) {
+        console.error(e);
+        res.send(500);
+      } else {
+        res.send(investments);
+      }
     }
-  })
-})
+  );
+});
+
+// new route for csv report generation
+app.get("/generate-report", async (req, res) => {
+  try {
+  } catch (e) {
+    console.error(e);
+    res.status(500).send("error with report");
+  }
+});
 
 app.listen(config.port, (err) => {
   if (err) {
-    console.error("Error occurred starting the server", err)
-    process.exit(1)
+    console.error("Error occurred starting the server", err);
+    process.exit(1);
   }
-  console.log(`Server running on port ${config.port}`)
-})
+  console.log(`Server running on port ${config.port}`);
+});
