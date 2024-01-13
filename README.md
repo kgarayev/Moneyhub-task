@@ -14,6 +14,14 @@ Admin - localhost:8083
 
 - `/generate-report` generate csv report as specified
 
+### Additional Modules Used
+
+In the process of writing the new route, I have used additional modules such as:
+
+- `request-promise`
+- `csv-stringify`
+- `jest`
+
 ### Testing
 
 Only one test suite has been written to do unit testing of the `/generate-report` route in the `admin`` service.
