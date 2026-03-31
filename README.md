@@ -6,8 +6,6 @@ A request for a new admin feature has been received
 
 ---
 
-## KENAN's SOLUTION AND ANSWERS
-
 ### My New Route:
 
 Admin - localhost:8083
